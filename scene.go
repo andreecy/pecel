@@ -1,7 +1,7 @@
 package pecel
 
 import (
-	"image/color"
+	// "image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -38,21 +38,21 @@ func (s *SceneManager) LoadScene(scene Scene) {
 	s.current = scene
 }
 
-type BasicScene struct {
-	World       *ebiten.Image
-	Camera      *Camera
-	GameObjects []GameObject
-}
-
-func (s *BasicScene) Update() {
-}
-
-func (s *BasicScene) Draw(screen *ebiten.Image) {
-	s.World.Clear()
-	s.World.Fill(color.White)
-
-	for _, obj := range s.GameObjects {
-		obj.Draw(s.World)
-	}
-	s.Camera.Render(s.World, screen)
-}
+// type BasicScene struct {
+// 	world       *ebiten.Image
+// 	camera      *Camera
+// 	gameObjects []GameObject
+// }
+//
+// func (s *BasicScene) Update() {
+// }
+//
+// func (s *BasicScene) Draw(screen *ebiten.Image) {
+// 	s.world.Clear()
+// 	s.world.Fill(color.White)
+//
+// 	for _, obj := range s.gameObjects {
+// 		obj.Draw(s.world)
+// 	}
+// 	s.camera.Render(s.world, screen)
+// }

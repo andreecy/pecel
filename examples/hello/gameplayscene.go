@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"image"
-  _ "image/png"
+	_ "image/png"
 	"log"
 
 	"github.com/andreecy/pecel"
@@ -16,7 +16,8 @@ import (
 type GameplayScene struct {
 	playerPos  pecel.Vec2
 	keyPressed []ebiten.Key
-	pecel.BasicScene
+	world      *ebiten.Image
+	camera     *pecel.Camera
 }
 
 var (
@@ -39,12 +40,12 @@ func init() {
 }
 
 func (s *GameplayScene) Update(state *pecel.GameState) error {
-	if s.World == nil {
-		s.World = ebiten.NewImage(200, 200)
+	if s.world == nil {
+		s.world = ebiten.NewImage(200, 200)
 	}
 
-	if s.Camera == nil {
-		s.Camera = pecel.CreateCamera(screenWidth, screenHeight)
+	if s.camera == nil {
+		s.camera = pecel.CreateCamera(screenWidth, screenHeight)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
@@ -61,34 +62,34 @@ func (s *GameplayScene) Update(state *pecel.GameState) error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyQ) {
-		s.Camera.ZoomFactor -= 1
+		s.camera.ZoomFactor -= 1
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyE) {
-		s.Camera.ZoomFactor += 1
+		s.camera.ZoomFactor += 1
 	}
 
 	// follow player
-	s.Camera.Position = s.playerPos
+	s.camera.Position = s.playerPos
 	return nil
 }
 
 func (s *GameplayScene) Draw(screen *ebiten.Image) {
-	s.World.Clear()
+	s.world.Clear()
 
 	// draw grounds
 	op := &ebiten.DrawImageOptions{}
-	s.World.DrawImage(tilesImage, op)
+	s.world.DrawImage(tilesImage, op)
 
 	// draw character
 	charOp := &ebiten.DrawImageOptions{}
 	charOp.GeoM.Translate(s.playerPos.X, s.playerPos.Y)
 	charOp.GeoM.Translate(-16, -16)
-	s.World.DrawImage(charImage, charOp)
+	s.world.DrawImage(charImage, charOp)
 
-	s.Camera.Render(s.World, screen)
+	s.camera.Render(s.world, screen)
 
 	// debug
-	wordPos := s.Camera.ScreenToWorld(pecel.NewVec2(ebiten.CursorPosition()))
+	wordPos := s.camera.ScreenToWorld(pecel.NewVec2(ebiten.CursorPosition()))
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.1f", ebiten.ActualFPS()))
-	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%s\nCursor World Pos: %.2f,%.2f", s.Camera.String(), wordPos.X, wordPos.Y), 0, screenHeight-32)
+	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%s\nCursor World Pos: %.2f,%.2f", s.camera.String(), wordPos.X, wordPos.Y), 0, screenHeight-32)
 }
