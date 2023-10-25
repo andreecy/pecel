@@ -5,6 +5,5 @@ Pecel is extensions for Ebitengine.
 - SceneManager
 - Scene
 - Camera
-- Math (WIP)
-    - Vector
-- GameObject (WIP)
+- Vector2
+- Transform
